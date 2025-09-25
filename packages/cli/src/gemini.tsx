@@ -227,15 +227,15 @@ export async function main() {
     validateDnsResolutionOrder(settings.merged.advanced?.dnsResolutionOrder),
   );
 
-  // Set a default auth type if one isn't set.
-  if (!settings.merged.security?.auth?.selectedType) {
-    if (process.env['CLOUD_SHELL'] === 'true') {
-      settings.setValue(
-        SettingScope.User,
-        'selectedAuthType',
-        AuthType.CLOUD_SHELL,
-      );
-    }
+  // Environment variables override existing auth settings
+  if (process.env['CLOUD_SHELL'] === 'true') {
+    settings.setValue(
+      SettingScope.User,
+      'selectedAuthType',
+      AuthType.CLOUD_SHELL,
+    );
+  } else if (process.env['STUDIO'] === 'true') {
+    settings.setValue(SettingScope.User, 'selectedAuthType', AuthType.STUDIO);
   }
 
   // Load custom themes from settings

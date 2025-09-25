@@ -360,7 +360,7 @@ export class GeminiChat {
         );
       }
 
-      return this.config.getContentGenerator().generateContentStream(
+      const result = this.config.getContentGenerator().generateContentStream(
         {
           model: modelToUse,
           contents: requestContents,
@@ -368,6 +368,8 @@ export class GeminiChat {
         },
         prompt_id,
       );
+
+      return result;
     };
 
     const onPersistent429Callback = async (
