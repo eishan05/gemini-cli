@@ -229,22 +229,13 @@ export async function main() {
 
   // Environment variables override existing auth settings
   if (process.env['CLOUD_SHELL'] === 'true') {
-    console.log('Setting auth type to CLOUD_SHELL');
     settings.setValue(
       SettingScope.User,
       'selectedAuthType',
       AuthType.CLOUD_SHELL,
     );
   } else if (process.env['STUDIO'] === 'true') {
-    console.log('Setting auth type to STUDIO');
     settings.setValue(SettingScope.User, 'selectedAuthType', AuthType.STUDIO);
-  } else if (!settings.merged.security?.auth?.selectedType) {
-    console.log('No auth type set and no environment variable detected');
-  } else {
-    console.log(
-      'Using existing auth type:',
-      settings.merged.security?.auth?.selectedType,
-    );
   }
 
   // Load custom themes from settings

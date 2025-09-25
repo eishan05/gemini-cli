@@ -41,15 +41,10 @@ export async function initializeApp(
   const themeError = validateTheme(settings);
 
   const selectedAuthType = settings.merged.security?.auth?.selectedType;
-  console.log('INIT DEBUG: selectedAuthType =', selectedAuthType);
-  console.log('INIT DEBUG: AuthType.STUDIO =', AuthType.STUDIO);
-  console.log('INIT DEBUG: authError =', authError);
 
   const shouldOpenAuthDialog =
     (selectedAuthType === undefined || !!authError) &&
     selectedAuthType !== AuthType.STUDIO;
-
-  console.log('INIT DEBUG: shouldOpenAuthDialog =', shouldOpenAuthDialog);
 
   if (config.getIdeMode()) {
     const ideClient = await IdeClient.getInstance();

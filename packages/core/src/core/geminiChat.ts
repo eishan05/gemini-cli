@@ -359,15 +359,6 @@ export class GeminiChat {
         );
       }
 
-      console.log(
-        '[STUDIO API DEBUG] *** GeminiChat about to call generateContentStream ***',
-      );
-      console.log('[STUDIO API DEBUG] modelToUse:', modelToUse);
-      console.log(
-        '[STUDIO API DEBUG] contentGenerator type:',
-        this.config.getContentGenerator().constructor.name,
-      );
-
       const result = this.config.getContentGenerator().generateContentStream(
         {
           model: modelToUse,
@@ -377,10 +368,6 @@ export class GeminiChat {
         prompt_id,
       );
 
-      console.log(
-        '[STUDIO API DEBUG] generateContentStream call completed, result type:',
-        typeof result,
-      );
       return result;
     };
 

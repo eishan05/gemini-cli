@@ -40,16 +40,7 @@ export class LoggingContentGenerator implements ContentGenerator {
   constructor(
     private readonly wrapped: ContentGenerator,
     private readonly config: Config,
-  ) {
-    console.log(
-      '[STUDIO API DEBUG] LoggingContentGenerator created with wrapped type:',
-      wrapped.constructor.name,
-    );
-    console.log(
-      '[STUDIO API DEBUG] Config auth type:',
-      config.getContentGeneratorConfig()?.authType,
-    );
-  }
+  ) {}
 
   getWrapped(): ContentGenerator {
     return this.wrapped;
@@ -61,11 +52,6 @@ export class LoggingContentGenerator implements ContentGenerator {
     promptId: string,
   ): void {
     const requestText = JSON.stringify(contents);
-    console.log('[STUDIO API DEBUG] API Request:', {
-      model,
-      promptId,
-      requestText: requestText.substring(0, 500) + '...',
-    });
     logApiRequest(
       this.config,
       new ApiRequestEvent(model, promptId, requestText),
@@ -101,15 +87,6 @@ export class LoggingContentGenerator implements ContentGenerator {
     const errorMessage = error instanceof Error ? error.message : String(error);
     const errorType = error instanceof Error ? error.name : 'unknown';
 
-    console.log('[STUDIO API DEBUG] API Error:', {
-      model,
-      prompt_id,
-      durationMs,
-      errorType,
-      errorMessage,
-      fullError: error,
-    });
-
     logApiError(
       this.config,
       new ApiErrorEvent(
@@ -130,21 +107,10 @@ export class LoggingContentGenerator implements ContentGenerator {
     req: GenerateContentParameters,
     userPromptId: string,
   ): Promise<GenerateContentResponse> {
-    console.log(
-      '[STUDIO API DEBUG] ========== generateContent ENTRY ==========',
-    );
-    console.log(
-      '[STUDIO API DEBUG] generateContent called with model:',
-      req.model,
-    );
-    console.log('[STUDIO API DEBUG] userPromptId:', userPromptId);
-    console.log('[STUDIO API DEBUG] req.contents type:', typeof req.contents);
     const startTime = Date.now();
     this.logApiRequest(toContents(req.contents), req.model, userPromptId);
     try {
-      console.log('[STUDIO API DEBUG] About to call wrapped.generateContent');
       const response = await this.wrapped.generateContent(req, userPromptId);
-      console.log('[STUDIO API DEBUG] Response received successfully');
       const durationMs = Date.now() - startTime;
       this._logApiResponse(
         durationMs,
@@ -155,7 +121,6 @@ export class LoggingContentGenerator implements ContentGenerator {
       );
       return response;
     } catch (error) {
-      console.log('[STUDIO API DEBUG] Error caught in generateContent:', error);
       const durationMs = Date.now() - startTime;
       this._logApiError(durationMs, error, req.model, userPromptId);
       throw error;
@@ -166,13 +131,6 @@ export class LoggingContentGenerator implements ContentGenerator {
     req: GenerateContentParameters,
     userPromptId: string,
   ): Promise<AsyncGenerator<GenerateContentResponse>> {
-    console.log(
-      '[STUDIO API DEBUG] ========== generateContentStream ENTRY ==========',
-    );
-    console.log(
-      '[STUDIO API DEBUG] generateContentStream called with model:',
-      req.model,
-    );
     const startTime = Date.now();
     this.logApiRequest(toContents(req.contents), req.model, userPromptId);
 

@@ -108,12 +108,6 @@ export function parseAndFormatApiError(
   currentModel?: string,
   fallbackModel?: string,
 ): string {
-  console.log('[STUDIO API DEBUG] parseAndFormatApiError called with:', {
-    error,
-    authType,
-    errorType: typeof error,
-    errorConstructor: error?.constructor?.name,
-  });
   if (isStructuredError(error)) {
     let text = `[API Error: ${error.message}]`;
     if (error.status === 429) {
