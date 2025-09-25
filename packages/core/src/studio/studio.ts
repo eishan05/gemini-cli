@@ -26,6 +26,10 @@ export async function createStudioContentGenerator(
       );
     }
 
+    console.error(
+      '✓ Using Studio authentication with monospace-pa.googleapis.com',
+    );
+
     const httpOptions = {
       baseUrl: 'https://monospace-pa.googleapis.com',
       apiVersion: 'v1',
