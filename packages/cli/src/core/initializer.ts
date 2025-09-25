@@ -10,6 +10,7 @@ import {
   IdeConnectionType,
   logIdeConnection,
   type Config,
+  AuthType,
 } from '@google/gemini-cli-core';
 import { type LoadedSettings } from '../config/settings.js';
 import { performInitialAuth } from './auth.js';
@@ -39,8 +40,16 @@ export async function initializeApp(
   );
   const themeError = validateTheme(settings);
 
+  const selectedAuthType = settings.merged.security?.auth?.selectedType;
+  console.log('INIT DEBUG: selectedAuthType =', selectedAuthType);
+  console.log('INIT DEBUG: AuthType.STUDIO =', AuthType.STUDIO);
+  console.log('INIT DEBUG: authError =', authError);
+
   const shouldOpenAuthDialog =
-    settings.merged.security?.auth?.selectedType === undefined || !!authError;
+    (selectedAuthType === undefined || !!authError) &&
+    selectedAuthType !== AuthType.STUDIO;
+
+  console.log('INIT DEBUG: shouldOpenAuthDialog =', shouldOpenAuthDialog);
 
   if (config.getIdeMode()) {
     const ideClient = await IdeClient.getInstance();
