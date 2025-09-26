@@ -104,10 +104,7 @@ async function fetchJwtToken(
   }
 }
 
-// Helper function to get status text (optional, but good for error messages)
 function getStatusText(statusCode: number): string {
-  // This is a simplified version; you might want a more comprehensive mapping
-  // or use an external library for HTTP status messages.
   switch (statusCode) {
     case 200:
       return 'OK';
@@ -140,19 +137,16 @@ async function callMetadataServer(
         urlObj.searchParams.set(key, params[key]);
       }
 
-      // undici's request function is similar to fetch but with a different signature
       const { statusCode, body } = await request(urlObj.toString(), {
         method: 'GET',
         headers: {
           'Metadata-Flavor': 'Google',
         },
-        // undici automatically handles redirects by default, but you can configure it
-        // maxRedirections: 5,
       });
 
       if (statusCode && statusCode >= 200 && statusCode < 300) {
         const textBody = await body.text();
-        // Important: You must consume the body to prevent resource leaks
+        // Important: consume the body to prevent resource leaks
         await body.dump();
         return textBody;
       } else {
