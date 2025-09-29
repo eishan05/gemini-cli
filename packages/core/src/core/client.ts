@@ -506,11 +506,22 @@ export class GeminiClient {
     if (this.currentSequenceModel) {
       modelToUse = this.currentSequenceModel;
     } else {
-      const router = await this.config.getModelRouterService();
-      const decision = await router.route(routingContext);
-      modelToUse = decision.model;
-      // Lock the model for the rest of the sequence
-      this.currentSequenceModel = modelToUse;
+      // Skip model routing for Studio auth since it doesn't support the required API calls
+      const authType = this.config.getContentGeneratorConfig()?.authType;
+      if (authType === 'studio') {
+        // Use a specific model for Studio API since it doesn't support 'auto'
+        modelToUse =
+          this.config.getModel() === 'auto'
+            ? 'gemini-2.5-flash'
+            : this.config.getModel();
+        this.currentSequenceModel = modelToUse;
+      } else {
+        const router = await this.config.getModelRouterService();
+        const decision = await router.route(routingContext);
+        modelToUse = decision.model;
+        // Lock the model for the rest of the sequence
+        this.currentSequenceModel = modelToUse;
+      }
     }
 
     const resultStream = turn.run(modelToUse, request, linkedSignal);
