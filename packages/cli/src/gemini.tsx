@@ -299,7 +299,7 @@ export async function main() {
       'selectedAuthType',
       AuthType.CLOUD_SHELL,
     );
-  } else if (process.env['STUDIO'] === 'true') {
+  } else if (process.env['FIREBASE_STUDIO'] === 'true') {
     settings.setValue(SettingScope.User, 'selectedAuthType', AuthType.STUDIO);
   }
 

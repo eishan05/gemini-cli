@@ -29,7 +29,7 @@ export async function createStudioContentGenerator(
     const jwtResponse = await fetchJwtToken(
       'https://monospace-pa.googleapis.com/v1/serviceAccounts:exchangeVmJwtForToken',
       token,
-      process.env['API_KEY'] || '',
+      process.env['MONOSPACE_WEB_CONSUMER_API_KEY'] || '',
     );
     // Read auth token from environment variable
     const authToken = jwtResponse.token;
