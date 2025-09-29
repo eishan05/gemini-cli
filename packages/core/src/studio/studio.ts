@@ -52,15 +52,6 @@ export async function createStudioContentGenerator(
       httpOptions,
     });
 
-    // Studio API doesn't support countTokens, so we provide a fallback implementation
-    googleGenAI.models.countTokens = async (req) => {
-      // Return a reasonable estimate: ~4 chars per token, but cap at a reasonable max
-      // This prevents compression attempts which aren't needed for Studio API
-      const totalChars = JSON.stringify(req.contents).length;
-      const estimatedTokens = Math.min(Math.ceil(totalChars / 4), 1000); // Cap at 1000 to prevent compression
-      return { totalTokens: estimatedTokens };
-    };
-
     return googleGenAI.models;
   }
 
